@@ -1,0 +1,53 @@
+---
+layout: post
+title: Apache HttpClient POST (Multipart/Form-data)
+date: 2013-11-22 16:58:10.000000000 +00:00
+type: post
+published: true
+status: publish
+categories: []
+tags: []
+meta:
+  _edit_last: '36016338'
+  _publicize_pending: '1'
+author:
+  login: velmuruganv
+  email: mailtovelmuruga@gmail.com
+  display_name: velmuruganv
+  first_name: ''
+  last_name: ''
+---
+<p>Recently i was asked to test the webservices(REST) from J-unit  which accepts list of files((Multipart/Form-data)) and stores it in the server location..</p>
+<p>I was going through list of api</p>
+<p>1. HttpURLConnection</p>
+<p>2. Apache Commons HttpClient-3.x(legacy-not in active developement)</p>
+<p>3. Apache HttpClient-4.x.x</p>
+<p>4. Apache cxf-client</p>
+<p>5. Jersey-Client</p>
+<p>6. RestEasy-Client</p>
+<p>However i opted to go with apache httpcomponents api.</p>
+<p>[code lang="java"]<br />
+public void doProvision(Map&lt;String, File&gt; fileMap)<br />
+throws HttpException, IOException {</p>
+<p>PostMethod multipartPostMethod = new PostMethod(getMR_URL() + &quot;/admin/provisioning/provision&quot;);<br />
+//String part<br />
+String name = &quot;{\&quot;initialProvision\&quot;:\&quot;&quot;;<br />
+String value = &quot;true\&quot;}&quot;;<br />
+StringPart stringPart = new StringPart(name, value);<br />
+stringPart.setCharSet(&quot;UTF-8&quot;);<br />
+stringPart.setContentType(&quot;application/json&quot;);<br />
+// 4 files to be uploaded.<br />
+FilePart systemPart = new FilePart(&quot;sourceSystem&quot;,fileMap.get(&quot;system&quot;));<br />
+FilePart propertyPart = new FilePart(&quot;properties&quot;,fileMap.get(&quot;properties&quot;));<br />
+FilePart componentPart = new FilePart(&quot;components&quot;,fileMap.get(&quot;component&quot;));<br />
+FilePart zipPart = new FilePart(&quot;xsdZip&quot;, fileMap.get(&quot;zip&quot;));<br />
+Part[] parts = { propertyPart, systemPart, componentPart, zipPart,stringPart };<br />
+MultipartRequestEntity requestEntity = new MultipartRequestEntity(parts, multipartPostMethod.getParams());<br />
+multipartPostMethod.setRequestEntity(requestEntity);<br />
+HttpClient client = new HttpClient();<br />
+multipartPostMethod.setRequestHeader(&quot;Cookie&quot;,mrHttpClient.getSessionCookie());<br />
+//Execute.<br />
+int status = client.executeMethod(multipartPostMethod);<br />
+String message = multipartPostMethod.getResponseBodyAsString();<br />
+}<br />
+[/code]</p>

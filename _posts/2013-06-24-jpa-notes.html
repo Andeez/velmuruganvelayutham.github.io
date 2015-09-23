@@ -1,0 +1,65 @@
+---
+layout: post
+title: JPA Notes
+date: 2013-06-24 09:38:33.000000000 +01:00
+type: post
+published: true
+status: publish
+categories:
+- Java Persistence API
+tags: []
+meta:
+  _publicize_pending: '1'
+  _edit_last: '36016338'
+author:
+  login: velmuruganv
+  email: mailtovelmuruga@gmail.com
+  display_name: velmuruganv
+  first_name: ''
+  last_name: ''
+---
+<h1>Java Persistence API</h1>
+<p dir="ltr">An entity class must follow these requirements.</p>
+<ul>
+<li>
+<p dir="ltr">The class must be annotated with the javax.persistence.Entity annotation.</p>
+</li>
+<li>
+<p dir="ltr">The class must have a public or protected, no-argument constructor. The class may have other constructors.</p>
+</li>
+<li>
+<p dir="ltr">The class must not be declared final. No methods or persistent instance variables must be declared final.</p>
+</li>
+<li>
+<p dir="ltr">If an entity instance is passed by value as a detached object, such as through a session bean’s remote business interface, the class must implement the Serializable interface.</p>
+</li>
+<li>
+<p dir="ltr">Entities may extend both entity and non-entity classes, and non-entity classes may extend entity classes.</p>
+</li>
+<li>
+<p dir="ltr">Persistent instance variables must be declared private, protected, or package-private and can be accessed directly only by the entity class’s methods. Clients must access the entity’s state through accessor or business methods</p>
+</li>
+</ul>
+<p dir="ltr">Entities may use persistent fields, persistent properties, or a combination of both. If the mapping annotations are applied to the entity’s instance variables, the entity uses persistent fields. If the mapping annotations are applied to the entity’s getter methods for JavaBeans-style properties, the entity uses persistent properties.</p>
+<p dir="ltr">If the entity class uses persistent fields, the Persistence runtime accesses entity-class instance variables directly. All fields not annotated javax.persistence.Transient or not marked as Java transient will be persisted to the data store.</p>
+<p dir="ltr">Mapping annotations cannot be applied to fields or properties annotated @Transient or marked transient.</p>
+<h3>Using Collections in Entity Fields and Properties:</h3>
+<p dir="ltr">If a field or property of an entity consists of a collection of basic types or embeddable classes, use the javax.persistence.ElementCollection annotation on the field or property.</p>
+<p dir="ltr">The two attributes of @ElementCollection are targetClass and fetch. The targetClass attribute specifies the class name of the basic or embeddable class and is optional if the field or property is defined using Java programming language generics. The optional fetch attribute is used to specify whether the collection should be retrieved lazily or eagerly, using the javax.persistence.FetchType constants of either LAZY or EAGER, respectively. By default, the collection will be fetched lazily.</p>
+<p dir="ltr">When using Map elements or relationships, the following rules apply.</p>
+<ul>
+<li>
+<p dir="ltr">The Map key or value may be a basic Java programming language type, an embeddable class, or an entity.</p>
+</li>
+<li>
+<p dir="ltr">When the Map value is an embeddable class or basic type, use the @ElementCollection annotation.</p>
+</li>
+<li>
+<p dir="ltr">When the Map value is an entity, use the @OneToMany or @ManyToMany annotation.</p>
+</li>
+<li>
+<p dir="ltr">Use the Map type on only one side of a bidirectional relations</p>
+</li>
+</ul>
+<p dir="ltr">Bean Validation constraints may be applied to persistent entity classes, embeddable classes, and mapped superclasses. By default, the Persistence provider will automatically perform validation on entities with persistent fields or properties annotated with Bean Validation constraints immediately after the PrePersist,PreUpdate, and PreRemove lifecycle events</p>
+<p> </p>

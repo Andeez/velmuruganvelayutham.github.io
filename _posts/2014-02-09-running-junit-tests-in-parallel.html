@@ -1,0 +1,60 @@
+---
+layout: post
+title: running-junit-tests-in-parallel
+date: 2014-02-09 18:18:37.000000000 +00:00
+type: post
+published: true
+status: publish
+categories: []
+tags: []
+meta:
+  _edit_last: '36016338'
+  _publicize_pending: '1'
+author:
+  login: velmuruganv
+  email: mailtovelmuruga@gmail.com
+  display_name: velmuruganv
+  first_name: ''
+  last_name: ''
+---
+<p>I'm using JUnit 4.4 and Maven and I have a large number of long-running integration tests.</p>
+<p>When it comes to parallelizing test suites there are a few solutions that allow me to run each test method in a single test-class in parallel. But all of these require that I change the tests in one way or another.</p>
+<p>I really think it would be a much cleaner solution to run X different test classes in X threads in parallel. I have hundreds of tests so I don't really care about threading individual test-classes.</p>
+<p>I opted for Junit-toolbox <a title="junit-toolbox" href="https://code.google.com/p/junit-toolbox/#How_to_use_it" target="_blank"> JUnit-Tool-Box</a></p>
+<p>1. add this dependency to your POM.xml.</p>
+<pre>&lt;dependency&gt;
+    &lt;groupId&gt;com.googlecode.junit-toolbox&lt;/groupId&gt;
+    &lt;artifactId&gt;junit-toolbox&lt;/artifactId&gt;
+    &lt;version&gt;1.5&lt;/version&gt;
+&lt;/dependency&gt;</pre>
+<p>2. Write a Junit test classes.</p>
+<p>[code lang="java"]<br />
+package com.numerify.qa.tests.detailedtests;</p>
+<p>import org.junit.After;<br />
+import org.junit.Before;<br />
+import org.junit.Test;<br />
+import org.junit.runner.RunWith;</p>
+<p>import com.googlecode.junittoolbox.ParallelRunner;</p>
+<p>@RunWith(ParallelRunner.class)<br />
+public class ParallelClassTest {<br />
+	@Before<br />
+	public void setup() {</p>
+<p>	}</p>
+<p>	@Test<br />
+	public void test1() {<br />
+		// TODO Auto-generated method stub<br />
+	}</p>
+<p>	@Test<br />
+	public void test2() {<br />
+		// TODO Auto-generated method stub<br />
+	}</p>
+<p>	@Test<br />
+	public void test3() {<br />
+		// TODO Auto-generated method stub<br />
+	}</p>
+<p>	@After<br />
+	public void tearDown() {</p>
+<p>	}<br />
+}</p>
+<p>[/code]</p>
+<p>ParallelRunner -- Executes all @Test methods as well as the calls to @Theory methods with different parameter assignments concurrently using several worker threads.</p>

@@ -1,0 +1,35 @@
+---
+layout: post
+title: Normal HTTP Request Vs HTTP proxy requests
+date: 
+type: post
+published: false
+status: draft
+categories: []
+tags: []
+meta:
+  _wpcom_is_markdown: '1'
+  _edit_last: '36016338'
+  geo_public: '0'
+author:
+  login: velmuruganv
+  email: mailtovelmuruga@gmail.com
+  display_name: velmuruganv
+  first_name: ''
+  last_name: ''
+---
+<p>Here is a short overview of the differences between HTTP requests that are sent directly to the destination and HTTP requests that are sent via a proxy.</p>
+<h3>Proxy Traffic vs. Normal Traffic</h3>
+<p>Following is the main figure for this article. It shows the two different packet types:</p>
+<p><strong>Direct HTTP requests:</strong> Destination IP is the HTTP server and the requested URI shows only the path behind the domain.<br />
+<strong>HTTP proxy requests:</strong> First packet is sent to the proxy. The requested URI shows the complete URL (host + path). The second packet is sent from the proxy to the final destination. And since it is a “real” proxy, both packets are inside its own TCP connection with different source addresses as well.</p>
+<p>In both scenarios, the “Host” value in the HTTP request is set to the requested domain. In the case of a proxy, the HTTP X-Forwarded-For header with the client IP address might be inserted.</p>
+<p>Note that the arrows in the figure show only the first HTTP packet flow, though it is a bi-directional communication in which the returning packets have the inverse order of source/destination IPs and ports.</p>
+<p>[caption id="attachment_202" align="aligncenter" width="620"]<a href="https://velmuruganv.files.wordpress.com/2015/09/at-a-glance-proxy-1024x709.png"><img class="size-full wp-image-202" src="{{ site.baseurl }}/assets/at-a-glance-proxy-1024x709.png" alt="At-a-Glance-Proxy-1024x709" width="620" height="429" /></a> At-a-Glance-Proxy-1024x709[/caption]</p>
+<p>At a Glance - Proxy<br />
+Wireshark Screenshots</p>
+<p>As an example, I opened my What-is-my-IP script at http://ip.webernetz.net two times: The first one without a proxy and the second one with a proxy on port 3128. (Note that the proxy server can run on different ports, e.g., 80, 8080, 3128.) The proxy IP came from a free proxy list (link below).<br />
+HTTP ip.webernetz.net without proxy</p>
+<p>[caption id="attachment_203" align="aligncenter" width="150"]<a href="https://velmuruganv.files.wordpress.com/2015/09/http-ip-webernetz-net-without-proxy-150x150.png"><img class="size-full wp-image-203" src="{{ site.baseurl }}/assets/http-ip-webernetz-net-without-proxy-150x150.png" alt="HTTP-ip.webernetz.net-without-proxy-150x150" width="150" height="150" /></a> HTTP-ip.webernetz.net-without-proxy-150x150[/caption]</p>
+<p><a href="https://velmuruganv.files.wordpress.com/2015/09/http-ip-webernetz-net-with-proxy-150x150.png"><img class="aligncenter size-full wp-image-204" src="{{ site.baseurl }}/assets/http-ip-webernetz-net-with-proxy-150x150.png" alt="HTTP-ip.webernetz.net-with-proxy-150x150" width="150" height="150" /></a><br />
+HTTP ip.webernetz.net with proxy</p>

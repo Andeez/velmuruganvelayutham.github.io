@@ -1,0 +1,72 @@
+---
+layout: post
+title: Dynamic number of tests - JUnit4
+date: 2014-02-12 06:28:26.000000000 +00:00
+type: post
+published: true
+status: publish
+categories: []
+tags: []
+meta:
+  _edit_last: '36016338'
+  _publicize_pending: '1'
+author:
+  login: velmuruganv
+  email: mailtovelmuruga@gmail.com
+  display_name: velmuruganv
+  first_name: ''
+  last_name: ''
+---
+<p>In our project I have several JUnit tests that e.g. take every file from a directory and run a test on it. If I implement a testEveryFileInDirectory method in the TestCase this shows up as only one test that may fail or succeed. But I am interested in the results on each individual file. How can I write a TestCase / TestSuite such that each file shows up as a separate test e.g. in the graphical testrunner of eclipse? (Coding an explicit test method for each file is not an option.)</p>
+<p>[code lang="java"]<br />
+package com.vel.qa.tests.detailedtests;</p>
+<p>import java.io.File;<br />
+import java.util.ArrayList;<br />
+import java.util.Collection;</p>
+<p>import org.junit.After;<br />
+import org.junit.Before;<br />
+import org.junit.Test;<br />
+import org.junit.runner.RunWith;<br />
+import org.junit.runners.Parameterized;<br />
+import org.junit.runners.Parameterized.Parameters;</p>
+<p>@RunWith(Parameterized.class)<br />
+public class ParameterizedTest {</p>
+<p>	@Before<br />
+	public void method() {<br />
+		System.out.println(&quot;Set Up method  &quot;);<br />
+	}</p>
+<p>	@Parameters(name = &quot;{0}&quot;)<br />
+	public static Collection&lt;Object[]&gt; data() {<br />
+		// load the files as you want from the directory<br />
+		System.out.println(&quot;Parameters&quot;);<br />
+		Collection&lt;Object[]&gt; data = new ArrayList&lt;Object[]&gt;();<br />
+		for (int i = 0; i &lt; 10; i++) {<br />
+			File file = new File(&quot;file_name_&quot; + i);<br />
+			Object[] fileArg1 = new Object[] { file };<br />
+			data.add(fileArg1);<br />
+		}<br />
+		return data;<br />
+	}</p>
+<p>	private File fInput;</p>
+<p>	// Constructor with arguments<br />
+	public ParameterizedTest(File input) {<br />
+		System.out.println(&quot;constructor&quot;);<br />
+		this.fInput = input;<br />
+	}</p>
+<p>	// This test will be called multiple times depends on size of the parameters<br />
+	// set at the @paramenters method.<br />
+	@Test<br />
+	public void test() {<br />
+		System.out.println(&quot;test called  &quot;);<br />
+		// do more validation based on your requirements.<br />
+	}</p>
+<p>	@After<br />
+	public void tearDown() {</p>
+<p>	}<br />
+}<br />
+[/code]</p>
+<li>1. Junit will call this static method (@Parameters) first to get all the collection of data</li>
+<li>2. For Each array in the collection , Junit will create an object of this class by calling the constructor(argument) you provided and then call set up method(@Before) and then call the test method (@Test) that you have	written.</li>
+<li>3. In that way if size of the collection is 50, then 50 times test method (@Test)will be called  by JUnit.</li>
+<p>The results of the above program looks like as shown below.<br />
+[caption id="attachment_100" align="alignnone" width="620"]<a href="http://velmuruganv.files.wordpress.com/2014/02/junit_graphical_results_eclipse.png"><img src="{{ site.baseurl }}/assets/junit_graphical_results_eclipse.png" alt="junit_graphical_results_eclipse" width="620" height="162" class="size-full wp-image-100" /></a> junit_graphical_results_eclipse[/caption]</p>

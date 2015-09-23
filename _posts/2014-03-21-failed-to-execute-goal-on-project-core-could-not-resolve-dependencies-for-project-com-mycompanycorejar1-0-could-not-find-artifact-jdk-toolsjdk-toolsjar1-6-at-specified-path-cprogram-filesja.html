@@ -1,0 +1,40 @@
+---
+layout: post
+title: ! 'Failed to execute goal on project core: Could not resolve dependencies for
+  project com.mycompany:core:jar:1.0: Could not find artifact jdk.tools:jdk.tools:jar:1.6
+  at specified path C:\Program Files\Java\jre7/../lib/tools.jar ->'
+date: 2014-03-21 07:58:15.000000000 +00:00
+type: post
+published: true
+status: publish
+categories: []
+tags:
+- broadleaf
+meta:
+  _wpcom_is_markdown: '1'
+  _edit_last: '36016338'
+  _publicize_pending: '1'
+  geo_public: '0'
+author:
+  login: velmuruganv
+  email: mailtovelmuruga@gmail.com
+  display_name: velmuruganv
+  first_name: ''
+  last_name: ''
+---
+<p>Hi ,</p>
+<p>When i tried to install the broadleaf commerce on my local machine i was facing  this error.</p>
+<p>Failed to execute goal on project core: Could not resolve dependencies for project com.mycompany:core:jar:1.0: Could not find artifact jdk.tools:jdk.tools:jar:1.6 at specified path C:\Program Files\Java\jre7/../lib/tools.jar -&gt;</p>
+<p>You will need a Java JDK not just a JRE.</p>
+<p><a href="http://velmuruganv.files.wordpress.com/2014/03/jdk_home_1.png"><img src="{{ site.baseurl }}/assets/jdk_home_1.png" alt="jdk_home_1" width="620" height="641" class="alignnone size-full wp-image-142" /></a></p>
+<p><a href="http://velmuruganv.files.wordpress.com/2014/03/jdk_home_2.png"><img src="{{ site.baseurl }}/assets/jdk_home_2.png" alt="jdk_home_2" width="566" height="533" class="alignnone size-full wp-image-143" /></a></p>
+<p>Also I have added tools.jar as dependencies in the POM.xml of ecommerce-core (parent) module as below. Alternative way is to install this jar locally using mvn install command.</p>
+<p>[code lang="xml"]<br />
+&lt;dependency&gt;<br />
+	&lt;groupId&gt;jdk.tools&lt;/groupId&gt;<br />
+	&lt;artifactId&gt;jdk.tools&lt;/artifactId&gt;<br />
+	&lt;version&gt;jdk1.7.0_45&lt;/version&gt;<br />
+	&lt;scope&gt;system&lt;/scope&gt;<br />
+	&lt;systemPath&gt;${JAVA_HOME}/lib/tools.jar&lt;/systemPath&gt;<br />
+&lt;/dependency&gt;<br />
+[/code]</p>

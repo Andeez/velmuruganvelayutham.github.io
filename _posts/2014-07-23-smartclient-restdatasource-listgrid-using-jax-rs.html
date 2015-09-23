@@ -1,0 +1,43 @@
+---
+layout: post
+title: Smartclient RestDatasource (ListGrid )using JAX-RS as JSON Data service
+date: 2014-07-23 03:06:54.000000000 +01:00
+type: post
+published: true
+status: publish
+categories:
+- RestDatasource
+- smartclient
+tags:
+- listgrid
+- restdatasource
+- smartclient
+meta:
+  _edit_last: '36016338'
+  _wpcom_is_markdown: '1'
+  geo_public: '0'
+  _publicize_pending: '1'
+author:
+  login: velmuruganv
+  email: mailtovelmuruga@gmail.com
+  display_name: velmuruganv
+  first_name: ''
+  last_name: ''
+---
+<p>This is for beginners who likes to understand the smartclient RIA using JAVA as JSON service.</p>
+<p>Smartclient LPGL version does not ship with smartclient server , so we need to manually create server side datasources for all of our Databound UI components.</p>
+<p>Say I have downloaded the smartclient LPGL version from isomorphic website. Now I would like to add ListGrid  library to my web application. Here is sample grid we are going to build here. The tutorial application is hosted in herokuapp.com. <a title="http://vel-smartclient-tutorial.herokuapp.com/" href="http://vel-smartclient-tutorial.herokuapp.com/" target="_blank">Click here to access it</a></p>
+<p>[caption id="attachment_163" align="aligncenter" width="620"]<a href="https://velmuruganv.files.wordpress.com/2014/07/smartclient-listgrid-jax-rs-json-datasource-tutorial.png"><img class="size-full wp-image-163" src="{{ site.baseurl }}/assets/smartclient-listgrid-jax-rs-json-datasource-tutorial.png" alt="smartclient-listgrid-jax-rs-json-datasource-tutorial" width="620" height="179" /></a> smartclient-listgrid-jax-rs-json-datasource-tutorial[/caption]</p>
+<p>&nbsp;</p>
+<p>Here are the few things i did to make this work.</p>
+<ul>
+<li>Create the RestDataSource with the JSON date format (id, structure fields, date format, data urls).</li>
+<li>Create UI-controls (Data grid, add, remove and delete controls).</li>
+<li>Create a JSON Webservice for the above CRUD Operations</li>
+<li>Run it (download smart client sdk LPGL version and run example in an atachment).</li>
+</ul>
+<p>&nbsp;</p>
+<p>The complete source code for this grid (UI) and Server side implementation(JAX-RS) for CRUD operations are available in the github here.   <a title="GitHub Repo" href="https://github.com/velmuruganvelayutham/smartclient-tutorial" target="_blank">git@heroku.com:vel-smartclient-tutorial.git</a></p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>

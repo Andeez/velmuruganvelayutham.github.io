@@ -1,0 +1,56 @@
+---
+layout: post
+title: Barcode Generator in Java
+date: 2014-08-18 10:38:18.000000000 +01:00
+type: post
+published: true
+status: publish
+categories:
+- Barcode-Generator
+tags:
+- barcode
+- barcode-generator-java
+- java
+- UPC
+meta:
+  _wpcom_is_markdown: '1'
+  _edit_last: '36016338'
+  _oembed_aa3cf31dd08748a5b605140701f3adf2: ! '{{unknown}}'
+  _oembed_76311c31d52671cdcd9f820e471858b4: ! '{{unknown}}'
+  _oembed_f13e1de2a22aa152e19775acd815b707: ! '{{unknown}}'
+  _publicize_pending: '1'
+  geo_public: '0'
+  _oembed_346f1437410640d7d52caba02f61286a: ! '{{unknown}}'
+  _oembed_b165516f83a5ae6d7a06f8998585a137: ! '{{unknown}}'
+  _oembed_f5ae8428aee4d1e59995a75a0d3b62e4: ! '{{unknown}}'
+  _oembed_e605f21ec313129ff323b02f74455ca1: ! '{{unknown}}'
+  _oembed_e5027c0c64df7eb2a3816d6e6e268a32: ! '{{unknown}}'
+  _oembed_4b3064f01120bae1fb3d3fa7adfbb56e: ! '{{unknown}}'
+  _oembed_c959eef242255c518ad2c33235b055c0: ! '{{unknown}}'
+  _oembed_944e5fa6f176e95eea4522c569146b7d: ! '{{unknown}}'
+  _oembed_0513895afa325b6b1d90043eea611430: ! '{{unknown}}'
+author:
+  login: velmuruganv
+  email: mailtovelmuruga@gmail.com
+  display_name: velmuruganv
+  first_name: ''
+  last_name: ''
+---
+<p>I was asked to work on generating barcode labels for one of projects. I searched online and found many free java projects which would help me in achieving my task.</p>
+<p>Here is the few i got via google search:</p>
+<ol>
+<li>http://barcode4j.sourceforge.net/</li>
+<li>http://sourceforge.net/projects/barbecue/</li>
+<li>http://www.onbarcode.com/products/java_barcode/</li>
+</ol>
+<p>Finally i have decided to go with barcode4j as it is available under Apache Licence V2.</p>
+<p>I have built a jar file using the source of barcode4j and kept it in a lib folder of my project.</p>
+<p>As i am using Maven for building my project on heroku for a demo purpose,  I need to keep this jar locally , so that heroku build structure will be able to understand the local jar (barcode4j.jar).</p>
+<p>I have followed the below steps to include the local jar in my  project in such a way that the maven build will make use of this library for solving dependencies.</p>
+<p><a title="https://devcenter.heroku.com/articles/local-maven-dependencies" href="https://devcenter.heroku.com/articles/local-maven-dependencies" target="_blank">https://devcenter.heroku.com/articles/local-maven-dependencies</a></p>
+<p>I followed the above link for making available local maven dependencies.</p>
+<p>&nbsp;</p>
+<p>The source code is available in the heroku git repository <a title="git@heroku.com:vel-barcode-generator.git" href="vel-barcode-generator.git" target="_blank">here</a></p>
+<p>The live demo is available <a title="http://vel-barcode-generator.herokuapp.com/" href="http://vel-barcode-generator.herokuapp.com/" target="_blank">here</a></p>
+<p>&nbsp;</p>
+<p>[caption id="attachment_177" align="aligncenter" width="620"]<a href="https://velmuruganv.files.wordpress.com/2014/08/barcode-generator.png"><img class="size-full wp-image-177" src="{{ site.baseurl }}/assets/barcode-generator.png" alt="Barcode-Generator-Picture" width="620" height="227" /></a> Barcode-Generator-Picture[/caption]</p>

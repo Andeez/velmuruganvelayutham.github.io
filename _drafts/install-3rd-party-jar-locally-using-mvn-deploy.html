@@ -1,0 +1,24 @@
+---
+layout: post
+title: install 3rd party jar locally using mvn:deploy
+date: 
+type: post
+published: false
+status: draft
+categories: []
+tags: []
+meta:
+  _wpcom_is_markdown: '1'
+  _edit_last: '36016338'
+  geo_public: '0'
+  _oembed_b5ca8bfda39794ed477a2356f306105d: ! '{{unknown}}'
+author:
+  login: velmuruganv
+  email: mailtovelmuruga@gmail.com
+  display_name: velmuruganv
+  first_name: ''
+  last_name: ''
+---
+<p>mvn deploy:deploy-file -Durl=file:///home/velmuruganv/Documents/workspace-sts-3.6.0.RELEASE/trade-show/repo -Dfile=/home/velmuruganv/jsoup/target/scraper-1.7.4-SNAPSHOT.jar -DgroupId=com.tocgroup -DartifactId=scraper -Dpackaging=jar -Dversion=1.7.4-SNAPSHOT</p>
+<p>&nbsp;</p>
+<p>https://devcenter.heroku.com/articles/local-maven-dependencies#create-a-local-maven-repository-directory</p>

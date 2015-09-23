@@ -1,0 +1,70 @@
+---
+layout: post
+title: Broadleaf findings
+date: 
+type: post
+published: false
+status: draft
+categories: []
+tags: []
+meta:
+  geo_public: '0'
+  _wpcom_is_markdown: '1'
+  _edit_last: '36016338'
+  _oembed_14dd4594f7758140976d5f96327f0f7a: ! '{{unknown}}'
+author:
+  login: velmuruganv
+  email: mailtovelmuruga@gmail.com
+  display_name: velmuruganv
+  first_name: ''
+  last_name: ''
+---
+<p><strong>Git workflow:</strong></p>
+<ol>
+<li>create a local branch from the local master , start commit the changes to the local branch.</li>
+<li>take a pull from the remote master to local master.</li>
+<li>merge the local branch to local master branch</li>
+<li>push the local master to the remote master.</li>
+</ol>
+<p>This way we can avoid the merge conflicts.</p>
+<p><strong>How to setup Java remote debugging in Eclipse</strong></p>
+<p><a href="http://javarevisited.blogspot.in/2011/02/how-to-setup-remote-debugging-in.html">How to setup Java remote debugging in Eclipse</a>.</p>
+<p><strong>Mysql Switch:</strong></p>
+<p>After doing all the steps mentioned in the <a title="broadleaf docs " href="http://www.broadleafcommerce.com/docs/core/current/tutorials/getting-started-tutorials/switch-to-mysql-tutorial">mysql broadleaf switch </a> we need to do " mvn install " for ecommerce-demosite. Otherwise we will end up in getting sql errors(can't create table ........ )..</p>
+<p>For the next time you start up the server, set <strong>hibernate.hbm2ddl.auto=none</strong> in all the runtime properties , otherwise the table's will be droped when sessionfactory is closed as blPU.hibernate.hbm2ddl.auto=create-drop mentioned previously.</p>
+<p>blPU.hibernate.hbm2ddl.auto=none<br />
+blCMSStorage.hibernate.hbm2ddl.auto=none<br />
+blSecurePU.hibernate.hbm2ddl.auto=none</p>
+<p>&nbsp;</p>
+<p>Swithing between different JDK's in Ubuntu 12.04:</p>
+<p>&nbsp;</p>
+<p>Switching between installed Java versions can be accomplished using the <code>update alternatives</code>command.</p>
+<ul>
+<li>To get a list of your installed Java platforms, run the following command from the terminal:
+<pre class="lang-java prettyprint prettyprinted"><code><span class="pln">sudo update</span><span class="pun">-</span><span class="pln">alternatives </span><span class="pun">--</span><span class="pln">config java</span></code></pre>
+<p>This will give you a list output similar to this:</p>
+<pre class="lang-java prettyprint prettyprinted"><code><span class="typ">There</span><span class="pln"> are </span><span class="lit">2</span><span class="pln"> choices </span><span class="kwd">for</span><span class="pln"> the alternative java </span><span class="pun">(</span><span class="pln">providing </span><span class="pun">/</span><span class="pln">usr</span><span class="pun">/</span><span class="pln">bin</span><span class="pun">/</span><span class="pln">java</span><span class="pun">).</span>
+   <span class="typ">Selection</span>    <span class="typ">Path</span>                                           <span class="typ">Priority</span>   <span class="typ">Status</span>
+  <span class="pun">------------------------------------------------------------</span>
+  <span class="lit">0</span>            <span class="pun">/</span><span class="pln">usr</span><span class="pun">/</span><span class="pln">lib</span><span class="pun">/</span><span class="pln">jvm</span><span class="pun">/</span><span class="pln">java</span><span class="pun">-</span><span class="lit">6</span><span class="pun">-</span><span class="pln">oracle</span><span class="pun">/</span><span class="pln">jre</span><span class="pun">/</span><span class="pln">bin</span><span class="pun">/</span><span class="pln">java         </span><span class="lit">1070</span>      <span class="kwd">auto</span><span class="pln"> mode
+  </span><span class="lit">1</span>            <span class="pun">/</span><span class="pln">usr</span><span class="pun">/</span><span class="pln">lib</span><span class="pun">/</span><span class="pln">jvm</span><span class="pun">/</span><span class="pln">java</span><span class="pun">-</span><span class="lit">7</span><span class="pun">-</span><span class="pln">openjdk</span><span class="pun">-</span><span class="pln">i386</span><span class="pun">/</span><span class="pln">jre</span><span class="pun">/</span><span class="pln">bin</span><span class="pun">/</span><span class="pln">java   </span><span class="lit">1051</span><span class="pln">      manual mode
+</span><span class="pun">*</span> <span class="lit">2</span>            <span class="pun">/</span><span class="pln">usr</span><span class="pun">/</span><span class="pln">lib</span><span class="pun">/</span><span class="pln">jvm</span><span class="pun">/</span><span class="pln">java</span><span class="pun">-</span><span class="lit">6</span><span class="pun">-</span><span class="pln">openjdk</span><span class="pun">-</span><span class="pln">i386</span><span class="pun">/</span><span class="pln">jre</span><span class="pun">/</span><span class="pln">bin</span><span class="pun">/</span><span class="pln">java   </span><span class="lit">1069</span><span class="pln">      manual mode
+</span><span class="typ">Press</span><span class="pln"> enter to keep the current choice</span><span class="pun">[*],</span><span class="pln"> or type selection number</span><span class="pun">:</span> </code></pre>
+</li>
+</ul>
+<p>In this case, the Open JDK 6 version is running. To switch to the Open JDK version 7, you would select option <code>1</code> at the prompt and press the <kbd>Enter</kbd> key.</p>
+<p>You will now be running the OpenJDK 7 version. No other changes will be needed to switch your Java versions.</p>
+<p>However ,  You may  need to update the <span style="text-decoration:underline;"><em><strong>/etc/environment</strong></em></span> file to point it to the latest jdk 7 location.</p>
+<ul>
+<li>to get the JDK location , Type the below command,</li>
+</ul>
+<p><b><i><span style="text-decoration:underline;">ls -lh /usr/lib/jvm</span></i></b></p>
+<p>This command will show output something like below,</p>
+<p>default-java  java-1.6.0-openjdk-amd64  java-6-openjdk-common<br />
+java-1.5.0-gcj-4.6  java-6-openjdk  java-7-openjdk-amd64<br />
+java-1.6.0-openjdk  java-6-openjdk-amd64  java-7-oracle</p>
+<p>Update the <em><span style="text-decoration:underline;"><strong>/etc/environment </strong></span></em> file with latest sdk path. and do <em><span style="text-decoration:underline;"><strong>source /etc/environment</strong></span></em></p>
+<p>&nbsp;</p>
+<p>Cordova :</p>
+<p><span class="pln">c<a href="https://cordova.apache.org/docs/en/3.0.0/guide_cli_index.md.html">ordova create hello com</a></span><a href="https://cordova.apache.org/docs/en/3.0.0/guide_cli_index.md.html"><span class="pun">.</span><span class="pln">example</span><span class="pun">.</span><span class="pln">hello </span><span class="typ">HelloWorld</span></a></p>
+<p>https://cordova.apache.org/docs/en/3.0.0/guide_cli_index.md.html</p>

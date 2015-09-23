@@ -1,0 +1,101 @@
+---
+layout: post
+title: Result Aggregation using JUnit- Rule (Testwatcher)
+date: 2014-02-17 11:09:09.000000000 +00:00
+type: post
+published: true
+status: publish
+categories: []
+tags: []
+meta:
+  _publicize_pending: '1'
+  _edit_last: '36016338'
+  _wpcom_is_markdown: '1'
+author:
+  login: velmuruganv
+  email: mailtovelmuruga@gmail.com
+  display_name: velmuruganv
+  first_name: ''
+  last_name: ''
+---
+<p>Hi All,</p>
+<p>I was asked to create a custom JUnit test result file which only has test case name and pass/failure message.</p>
+<p>result.txt should contain like mentioned below.</p>
+<p>testmethod1 : success<br />
+testmethod2 : failed<br />
+testmethod3 : success<br />
+testmethod4 : success<br />
+etc..</p>
+<p><strong>1. Result Aggregation:</strong></p>
+<p>The challenge is , we can not log the test results within the test method itself because at this time we will not be able to know whether the test will pass or fail. You may think ,we can write a log statement at the end of the test method but that will log only the <strong>success </strong>test methods, what about the<strong>Failed/Ignored/Errors</strong> test methods? As soon as assert failed , AssertionError will be thrown by the Junit and we will not be having any control to log this anywhere.. Still you may think, you can catch this exception and write a log statement and then fail the test methods. Yeah , this would work but it has some drawbacks.</p>
+<ol>
+<li>we will not be able to capture the ignored tests.</li>
+<li>we will not be able to clearly classify Errors vs Failures (these are completely different)</li>
+<li>we need to write a try/catch block in all of our tests. More customization required.</li>
+</ol>
+<p>The above functionlity can be achieved easily using TestWatchmen Rule provided by JUnit-Framework.</p>
+<p>JUnit-4.9 introduced new features called &quot;Rule&quot; which can be used to keep a log of each passing, ignored, failing tests. <a href="https://github.com/junit-team/junit/wiki/Rules">Click here for more information</a></p>
+<p>With this approach we need to do <strong>no </strong>modification to the existing code still we can do our result aggregation.</p>
+<h3>Step 1: Create a class which implements TestRule Interface.</h3>
+<p>[code lang="java"]<br />
+package com.vel.qa.tests.detailedtests;</p>
+<p>import org.junit.rules.TestWatcher;<br />
+import org.junit.runner.Description;<br />
+import org.junit.runners.model.Statement;</p>
+<p>import com.vel.qa.helpers.LoggerUtility;</p>
+<p>public class ResultAggregator extends TestWatcher {</p>
+<p>	private static String resultLog = &quot;&quot;;<br />
+	private LoggerUtility loggerUtil = null;</p>
+<p>	ResultAggregator() {<br />
+		// TODO need to refactor this constructor<br />
+		loggerUtil = LoggerUtility.getInstance();<br />
+	}</p>
+<p>	@Override<br />
+	public Statement apply(Statement base, Description description) {<br />
+		return super.apply(base, description);<br />
+	}</p>
+<p>	@Override<br />
+	protected void succeeded(Description description) {<br />
+		resultLog = description.getMethodName() + &quot;: &quot; + &quot;SUCCESS \n&quot;;<br />
+		loggerUtil.getLogger(&quot;result&quot;).info(resultLog);<br />
+	}</p>
+<p>	@Override<br />
+	protected void failed(Throwable e, Description description) {<br />
+		resultLog = description.getMethodName() + &quot;:  &quot; + &quot;FAILED &quot; + &quot;\n&quot;;<br />
+		loggerUtil.getLogger(&quot;result&quot;).info(resultLog);<br />
+	}</p>
+<p>	@Override<br />
+	protected void starting(Description description) {<br />
+		super.starting(description);<br />
+	}</p>
+<p>	@Override<br />
+	protected void finished(Description description) {<br />
+		super.finished(description);</p>
+<p>	}</p>
+<p>}</p>
+<p>[/code]</p>
+<p>This  class will keep a log of each passing and failing test:</p>
+<h3>Step 2: Create test class and add @Rule annotations.</h3>
+<p>[code lang="java"]<br />
+package com.numerify.qa.tests.detailedtests;</p>
+<p>import static org.junit.Assert.fail;</p>
+<p>import org.junit.Rule;<br />
+import org.junit.Test;</p>
+<p>public class ResultAggregatorTest {</p>
+<p>	@Rule<br />
+	public ResultAggregator log = new ResultAggregator();</p>
+<p>	@Test<br />
+	public void testmethod1() {</p>
+<p>	}</p>
+<p>	@Test<br />
+	public void testmethod2() {<br />
+		fail();<br />
+	}</p>
+<p>}<br />
+[/code]</p>
+<p>If you execute the above test class you will get an output as shown below.</p>
+<p>testmethod1 : SUCCESS</p>
+<p>testmethod1 : FAILED</p>
+<p>Note: LoggerUtil is the class which is an custom defined logger for logging different files using log4j.</p>
+<p><strong>2. Repeat test with different input files.</strong></p>
+<p>We could achieve this by extending Junit-Core Runners [Junit-4X runners , Junit3X runners will be compatible with annotations] and iterate it with our files. I understood that this runner [Parameterized.java] are provided by JUnit itself in the recent releases. <a href="https://github.com/junit-team/junit/wiki/Parameterized-tests">Click here to know more about Parameterized-tests</a></p>

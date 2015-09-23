@@ -1,0 +1,181 @@
+---
+layout: post
+title: useful postgres commands
+date: 
+type: post
+published: false
+status: draft
+categories: []
+tags: []
+meta:
+  _edit_last: '36016338'
+author:
+  login: velmuruganv
+  email: mailtovelmuruga@gmail.com
+  display_name: velmuruganv
+  first_name: ''
+  last_name: ''
+---
+<h3>1. How to find the largest table in the postgreSQL database?</h3>
+<pre>$ /usr/local/pgsql/bin/psql test
+Welcome to psql 8.3.7, the PostgreSQL interactive terminal.
+
+Type:  \copyright for distribution terms
+       \h for help with SQL commands
+       \? for help with psql commands
+       \g or terminate with semicolon to execute query
+       \q to quit
+
+test=# <strong>SELECT relname, relpages FROM pg_class ORDER BY relpages DESC;
+</strong>              relname              | relpages
+-----------------------------------+----------
+ pg_proc                           |       50
+ pg_proc_proname_args_nsp_index    |       40
+ pg_depend                         |       37
+ pg_attribute                      |       30</pre>
+<p><code> </code><br />
+If you want only the first biggest table in the postgres database then append the above query with limit as:</p>
+<pre># <strong>SELECT relname, relpages FROM pg_class ORDER BY relpages DESC limit 1;
+</strong> relname | relpages
+---------+----------
+ pg_proc |       50
+(1 row)</pre>
+<p>&nbsp;</p>
+<ul>
+<li><strong>relname</strong> – name of the relation/table.</li>
+<li><strong>relpages </strong>- relation pages ( number of pages, by default a page is 8kb )</li>
+<li><strong>pg_class</strong> – system table, which maintains the details of relations</li>
+<li><strong>limit 1</strong> – limits the output to display only one row.</li>
+</ul>
+<h3>2. How to calculate postgreSQL database size in disk ?</h3>
+<p>pg_database_size is the function which gives the size of mentioned database. It shows the size in bytes.</p>
+<pre># <strong>SELECT pg_database_size('geekdb');
+</strong>pg_database_size
+------------------
+         63287944
+(1 row)</pre>
+<p><code> </code><br />
+If you want it to be shown pretty, then use pg_size_pretty function which converts the size in bytes to human understandable format.</p>
+<pre># <strong>SELECT pg_size_pretty(pg_database_size('geekdb'));
+</strong> pg_size_pretty
+----------------
+ 60 MB
+(1 row)</pre>
+<h3>3. How to calculate postgreSQL table size in disk ?</h3>
+<p>This is the total disk space size used by the mentioned table including index and toasted data. You may be interested in knowing only the size of the table excluding the index then use the following command.</p>
+<pre># <strong>SELECT pg_size_pretty(pg_total_relation_size('big_table'));
+</strong> pg_size_pretty
+----------------
+ 55 MB
+(1 row)</pre>
+<h4>How to find size of the postgreSQL table ( not including index ) ?</h4>
+<p>Use pg_relation_size instead of pg_total_relation_size as shown below.</p>
+<div></div>
+<pre><strong># SELECT pg_size_pretty(pg_relation_size('big_table'));
+</strong> pg_size_pretty
+----------------
+ 38 MB
+(1 row)</pre>
+<h3>4. How to view the indexes of an existing postgreSQL table ?</h3>
+<pre>Syntax: # \d table_name</pre>
+<p>As shown in the example below, at the end of the output you will have a section titled as indexes, if you have index in that table. In the example below, table pg_attribute has two btree indexes. By default postgres uses btree index as it good for most common situations.</p>
+<pre>test=# <strong>\d pg_attribute
+</strong>   Table "pg_catalog.pg_attribute"
+    Column     |   Type   | Modifiers
+---------------+----------+-----------
+ attrelid      | oid      | not null
+ attname       | name     | not null
+ atttypid      | oid      | not null
+ attstattarget | integer  | not null
+ attlen        | smallint | not null
+ attnum        | smallint | not null
+ attndims      | integer  | not null
+ attcacheoff   | integer  | not null
+ atttypmod     | integer  | not null
+ attbyval      | boolean  | not null
+ attstorage    | "char"   | not null
+ attalign      | "char"   | not null
+ attnotnull    | boolean  | not null
+ atthasdef     | boolean  | not null
+ attisdropped  | boolean  | not null
+ attislocal    | boolean  | not null
+ attinhcount   | integer  | not null
+<strong>Indexes:</strong>
+    "pg_attribute_relid_attnam_index" UNIQUE, btree (attrelid, attname)
+    "pg_attribute_relid_attnum_index" UNIQUE, btree (attrelid, attnum)</pre>
+<h3>5. How to specify postgreSQL index type while creating a new index on a table ?</h3>
+<p>By default the indexes are created as btree. You can also specify the type of index during the create index statement as shown below.</p>
+<pre>Syntax: CREATE INDEX name ON table USING index_type (column);
+
+# <strong>CREATE INDEX test_index ON numbers using hash (num);
+</strong></pre>
+<h3>6. How to work with postgreSQL transactions ?</h3>
+<h4>How to start a transaction ?</h4>
+<pre># BEGIN -- start the transaction.</pre>
+<h4>How to rollback or commit a postgreSQL transaction ?</h4>
+<p>All the operations performed after the BEGIN command will be committed to the postgreSQL database only you execute the commit command. Use rollback command to undo all the transactions before it is committed.</p>
+<pre># ROLLBACK -- rollbacks the transaction.
+# COMMIT -- commits the transaction.</pre>
+<h3>7. How to view execution plan used by the postgreSQL for a SQL query ?</h3>
+<pre># <strong>EXPLAIN query;</strong></pre>
+<h3>8. How to display the plan by executing the query on the server side ?</h3>
+<p>This executes the query in the server side, thus does not shows the output to the user. But shows the plan in which it got executed.</p>
+<pre># <strong>EXPLAIN ANALYZE query;</strong></pre>
+<h3>9. How to generate a series of numbers and insert it into a table ?</h3>
+<p>This inserts 1,2,3 to 1000 as thousand rows in the table numbers.</p>
+<pre># <strong>INSERT INTO numbers (num) VALUES ( generate_series(1,1000));</strong></pre>
+<h3>10. How to count total number of rows in a postgreSQL table ?</h3>
+<p>This shows the total number of rows in the table.</p>
+<pre># <strong>select count(*) from table;</strong></pre>
+<p><code> </code><br />
+Following example gives the total number of rows with a specific column value is not null.</p>
+<pre># <strong>select count(col_name) from table;</strong></pre>
+<p><code> </code><br />
+Following example displays the distinct number of rows for the specified column value.</p>
+<pre># <strong>select count(distinct col_name) from table;</strong></pre>
+<h3>11. How can I get the second maximum value of a column in the table ?</h3>
+<h4>First maximum value of a column</h4>
+<pre># <strong>select max(col_name) from table;</strong></pre>
+<p>&nbsp;</p>
+<h4>Second maximum value of a column</h4>
+<pre># SELECT MAX(num) from number_table where num  &lt; ( select MAX(num) from number_table );</pre>
+<h3>12. How can I get the second minimum value of a column in the table ?</h3>
+<h4>First minimum value of a column</h4>
+<pre># <strong>select min(col_name) from table;</strong></pre>
+<p>&nbsp;</p>
+<h4>Second minimum value of a column</h4>
+<pre># SELECT MIN(num) from number_table where num &gt; ( select MIN(num) from number_table );</pre>
+<h3>13. How to view the basic available datatypes in postgreSQL ?</h3>
+<p>Below is the partial output that displays available basic datatypes and it’s size.</p>
+<pre>test=# <strong>SELECT typname,typlen from pg_type where typtype='b';</strong>
+    typname     | typlen
+----------------+--------
+ bool           |      1
+ bytea          |     -1
+ char           |      1
+ name           |     64
+ int8           |      8
+ int2           |      2
+ int2vector     |     -1</pre>
+<ul>
+<li>typname – name of the datatype</li>
+<li>typlen – length of the datatype</li>
+</ul>
+<h3>14. How to redirect the output of postgreSQL query to a file?</h3>
+<pre># <strong>\o output_file</strong>
+# SELECT * FROM pg_class;</pre>
+<p>The output of the query will be redirected to the “output_file”. After the redirection is enabled, the select command will not display the output in the stdout. To enable the output to the stdout again, execute the \o without any argument as mentioned below.</p>
+<pre># <strong>\o</strong></pre>
+<p><code> </code><br />
+As explained in our earlier article, you can also <a href="http://www.thegeekstuff.com/2009/01/how-to-backup-and-restore-postgres-database-using-pg_dump-and-psql/">backup and restore postgreSQL database using pg_dump and psql.</a></p>
+<h3>15. Storing the password after encryption.</h3>
+<p>PostgreSQL database can encrypt the data using the crypt command as shown below. This can be used to store your custom application username and password in a custom table.</p>
+<pre># <strong>SELECT crypt ( 'sathiya', gen_salt('md5') );</strong></pre>
+<h4>PostgreSQL crypt function Issue:</h4>
+<p>The postgreSQL crypt command may not work on your environment and display the following error message.</p>
+<pre>ERROR:  function gen_salt("unknown") does not exist
+HINT:  No function matches the given name and argument types.
+         You may need to add explicit type casts.</pre>
+<h4>PostgreSQL crypt function Solution:</h4>
+<p>To solve this problem, installl the postgresql-contrib-your-version package and execute the following command in the postgreSQL prompt.</p>
+<pre># \i /usr/share/postgresql/8.1/contrib/pgcrypto.sql</pre>

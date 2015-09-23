@@ -1,0 +1,55 @@
+---
+layout: post
+title: Download files from bitbucket
+date: 2014-02-09 17:37:34.000000000 +00:00
+type: post
+published: true
+status: publish
+categories: []
+tags: []
+meta:
+  _edit_last: '36016338'
+  _publicize_pending: '1'
+author:
+  login: velmuruganv
+  email: mailtovelmuruga@gmail.com
+  display_name: velmuruganv
+  first_name: ''
+  last_name: ''
+---
+<p>I was asked to download a file (raw) from bitbucket repository and wrote an automation script using those files. Bitbucket exposed set of REST Web services for their repository using which we can integrate our application with bitbucket.</p>
+<p>Steps to download files from bitbucket:</p>
+<p>1. Need a HttpClient library , I opted for Apache CXF Client.</p>
+<pre>
+&lt;dependency&gt;
+&lt;groupId&gt;org.apache.cxf&lt;/groupId&gt;
+&lt;artifactId&gt;cxf-rt-rs-client&lt;/artifactId&gt;
+&lt;version&gt;3.0.0-milestone1&lt;/version&gt;
+&lt;/dependency&gt;
+</pre>
+<p>2. REST API documents . <a href="https://confluence.atlassian.com/display/BITBUCKET/repository+Resource+1.0#repositoryResource1.0-GETtherawsource" title="File Resource "> File Resource</a></p>
+<p>[code lang="java"]<br />
+public class GitClient {<br />
+	static String url = &quot;https://bitbucket.org/api/1.0/repositories/myrepository/mr/raw/&quot;;<br />
+	static String branch = &quot;master&quot;;<br />
+	static String source = &quot;/MavenWeb/src/main/resources/&quot;;<br />
+	String test = &quot;/src/test/resources/&quot;;<br />
+	static String user = &quot;username&quot;;<br />
+	static String password = &quot;password&quot;;</p>
+<p>	public static void usingWebClient() throws FileNotFoundException,IOException {<br />
+		downloadFileFromBitBucket(&quot;provisioner-components-setup.ini&quot;);<br />
+		downloadFileFromBitBucket(&quot;provisioner-properties-setup.csv&quot;);<br />
+		downloadFileFromBitBucket(&quot;provisioner-resources-setup.zip&quot;);<br />
+		downloadFileFromBitBucket(&quot;provisioner-system-setup.ini&quot;);<br />
+	}</p>
+<p>	private static void downloadFileFromBitBucket(String resource)<br />
+			throws IOException, FileNotFoundException {<br />
+		WebClient client = WebClient.create(url + branch + source + resource,user, password, null);<br />
+		Response r = client.accept(&quot;text/plain&quot;).get();<br />
+		System.out.println(&quot;reponse&quot; + r.getStatus());<br />
+		IOUtils.copyLarge((InputStream) r.getEntity(), new FileOutputStream(new File(&quot;C:\\folder&quot; + resource)));<br />
+	}</p>
+<p>	public static void main(String args[]) throws FileNotFoundException,IOException {<br />
+		usingWebClient();<br />
+	}<br />
+} [/code]</p>

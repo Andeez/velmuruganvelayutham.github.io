@@ -1,0 +1,65 @@
+---
+layout: post
+title: Test execution order - JUnit 4.X
+date: 2014-02-17 14:15:57.000000000 +00:00
+type: post
+published: true
+status: publish
+categories: []
+tags: []
+meta:
+  _wpcom_is_markdown: '1'
+  _edit_last: '36016338'
+  _publicize_pending: '1'
+author:
+  login: velmuruganv
+  email: mailtovelmuruga@gmail.com
+  display_name: velmuruganv
+  first_name: ''
+  last_name: ''
+---
+<p>I want to execute test methods which are annotated by @Test in specific order.</p>
+<p>For example:</p>
+<p>[code lang="java"]<br />
+public class MyTest{<br />
+    @Test public void create(){System.out.println(&quot;create&quot;);}<br />
+    @Test public void update(){System.out.println(&quot;update&quot;);}<br />
+    @Test public void delete(){System.out.println(&quot;delete&quot;);}<br />
+}<br />
+[/code]<br />
+I want to ensure to run  <strong>create() </strong> before  <strong>update() </strong>and <strong>update</strong>before <strong>delete</strong> each time I run MyTest.</p>
+<p>The test execution order i would like to get is,</p>
+<ol>
+create<br />
+update<br />
+delete
+</ol>
+<h3>Test execution order</h3>
+<blockquote><p>
+  By design, JUnit does not specify the execution order of test method invocations. Until now, the methods were simply invoked in the order returned by the reflection API. However, using the JVM order is unwise since the Java platform does not specify any particular order, and in fact JDK 7 returns a more or less random order. Of course, well-written test code would not assume any order, but some does, and a predictable failure is better than a random failure on certain platforms.
+</p></blockquote>
+<p>From version 4.11, JUnit will by default use a deterministic, but not predictable, order (MethodSorters.DEFAULT). To change the test execution order simply annotate your test class using @FixMethodOrder and specify one of the available MethodSorters:</p>
+<p><strong>@FixMethodOrder(MethodSorters.JVM):</strong> Leaves the test methods in the order returned by the JVM. This order may vary from run to run.</p>
+<p><strong>@FixMethodOrder(MethodSorters.NAME_ASCENDING):</strong> Sorts the test methods by method name, in lexicographic order.</p>
+<p>[code lang="java"]<br />
+package com.vel.qa.tests.detailedtests;</p>
+<p>import org.junit.FixMethodOrder;<br />
+import org.junit.Test;<br />
+import org.junit.runners.MethodSorters;</p>
+<p>@FixMethodOrder(MethodSorters.NAME_ASCENDING)<br />
+public class MyTest {<br />
+	@Test<br />
+	public void aCreate() {<br />
+		System.out.println(&quot;create&quot;);<br />
+	}</p>
+<p>	@Test<br />
+	public void bUpdate() {<br />
+		System.out.println(&quot;update&quot;);<br />
+	}</p>
+<p>	@Test<br />
+	public void cDelete() {<br />
+		System.out.println(&quot;delete&quot;);<br />
+	}<br />
+}</p>
+<p>[/code]</p>
+<p>This would produce the output as i wanted.</p>
